@@ -50,7 +50,8 @@ function initNavigation() {
     toggle.setAttribute("aria-expanded", "false");
   };
 
-  toggle.addEventListener("click", () => {
+  toggle.addEventListener("click", (event) => {
+    event.stopPropagation();
     const isOpen = menu.classList.toggle("show");
     toggle.setAttribute("aria-expanded", String(isOpen));
   });
