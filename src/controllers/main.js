@@ -42,11 +42,31 @@ function initHeroSpotlight() {
 
 function initNavigation() {
   const menu = document.querySelector("#mainNav");
-  document.querySelectorAll("#mainNav .nav-link, #mainNav .btn").forEach((link) => {
-    link.addEventListener("click", () => {
-      if (menu.classList.contains("show") && window.bootstrap) bootstrap.Collapse.getOrCreateInstance(menu).hide();
-    });
+  const toggle = document.querySelector(".navbar-toggler");
+  if (!menu || !toggle) return;
+
+  const closeMenu = () => {
+    menu.classList.remove("show");
+    toggle.setAttribute("aria-expanded", "false");
+  };
+
+  toggle.addEventListener("click", () => {
+    const isOpen = menu.classList.toggle("show");
+    toggle.setAttribute("aria-expanded", String(isOpen));
   });
+
+  menu.querySelectorAll('a[href^="#"]').forEach((link) => {
+    link.addEventListener("click", closeMenu);
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") closeMenu();
+  });
+
+  window.addEventListener("resize", () => {
+    if (window.innerWidth >= 992) closeMenu();
+  });
+
   const header = document.querySelector("#header");
   window.addEventListener("scroll", () => header.classList.toggle("is-scrolled", window.scrollY > 12), { passive: true });
 }
